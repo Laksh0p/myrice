@@ -1,0 +1,47 @@
+#!/bin/bash
+
+WALLDIR="$HOME/Pictures/Wallpapers"
+CACHEDIR="$HOME/.cache/wallthumbs"
+
+mkdir -p "$CACHEDIR"
+
+choice=$(for img in "$WALLDIR"/*; do
+    [ -f "$img" ] || continue
+
+    name="$(basename "$img")"
+    name_no_ext="${name%.*}"
+    thumb="$CACHEDIR/$name_no_ext.png"
+
+    # Generate thumbnail if missing
+    if [ ! -f "$thumb" ]; then
+        case "$img" in
+            *.gif)
+                convert "$img[0]" -resize 300x200^ -gravity center -extent 300x200 "$thumb" 2>/dev/null
+                ;;
+            *)
+                convert "$img" -resize 300x200^ -gravity center -extent 300x200 "$thumb" 2>/dev/null
+                ;;
+        esac
+    fi
+
+    printf "%s\0icon\x1f%s\n" "$name" "$thumb"
+
+done | rofi \
+    -dmenu \
+    -i \
+    -p "Wallpaper" \
+    -show-icons \
+    -theme ~/.config/rofi/wallgallery.rasi)
+
+[ -z "$choice" ] && exit
+
+WALL="$WALLDIR/$choice"
+
+case "$WALL" in
+    *.gif|*.mp4|*.webm)
+        ~/.local/bin/setwall-animated "$WALL"
+        ;;
+    *)
+        ~/.local/bin/setwall "$WALL"
+        ;;
+esac

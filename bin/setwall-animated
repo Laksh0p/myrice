@@ -1,0 +1,22 @@
+#!/bin/bash
+
+WALL="$1"
+MONITOR="eDP-1"
+
+# Clear static wallpaper layer (but keep daemon alive)
+swww clear
+
+# Stop previous animated wallpaper
+pkill mpvpaper 2>/dev/null
+
+# Start animated wallpaper on background layer
+mpvpaper \
+  -o "--loop --no-audio --hwdec=auto" \
+  "$MONITOR" \
+  "$WALL" &
+
+# Generate colors
+wal -i "$WALL" -n
+
+# Reload waybar colors smoothly
+pkill -SIGUSR2 waybar

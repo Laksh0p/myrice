@@ -1,0 +1,36 @@
+#!/bin/bash
+
+WALL="$1"
+
+if [ -z "$WALL" ]; then
+  echo "Usage: setwall <wallpaper>"
+  exit 1
+fi
+
+# ensure daemon (no blocking delay)
+pgrep -x awww-daemon >/dev/null || awww-daemon &
+
+# if coming from animated
+if pgrep -x mpvpaper >/dev/null; then
+  # instant blank
+  awww img 0x1e1e2e \
+    --transition-type none \
+    --transition-step 255
+
+  pkill mpvpaper 2>/dev/null
+else
+  pkill mpvpaper 2>/dev/null
+fi
+
+# 🔥 IMMEDIATE transition (no sleep before this)
+awww img "$WALL" \
+  --transition-type wave \
+  --transition-duration 2.5 \
+  --transition-fps 144 &
+
+# rest can be async
+wal -i "$WALL" -n &
+kill -USR1 $(pidof kitty) 2>/dev/null &
+
+pkill waybar
+waybar >/dev/null 2>&1 &

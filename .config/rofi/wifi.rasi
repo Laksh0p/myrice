@@ -1,0 +1,36 @@
+* {
+    font: "JetBrainsMono Nerd Font 11";
+
+    bg: #0b0f14;
+    fg: #cdd6f4;
+    accent: #89b4fa;
+
+    background-color: @bg;
+    text-color: @fg;
+}
+
+window {
+    width: 420px;
+    border-radius: 12px;
+    border: 2px;
+    border-color: @accent;
+}
+
+listview {
+    lines: 7;
+    spacing: 6px;
+}
+
+element {
+    padding: 8px;
+    border-radius: 8px;
+}
+
+element selected {
+    background-color: @accent;
+    text-color: #11111b;
+}
+
+prompt {
+    text-color: @accent;
+}

@@ -1,0 +1,52 @@
+@import url("file:///home/laksh/.cache/wal/colors-waybar.css");
+
+window#waybar {
+    font-family: "JetBrains Mono NerdFont";
+    background-color: transparent;
+    font-size: 0.8rem;
+}
+
+/* LEFT */
+.modules-left {
+    background-color: @background;
+    color: @foreground;
+    border-radius: 8px;
+    padding: 2px 6px;
+}
+
+/* RIGHT */
+.modules-right {
+    background-color: alpha(@background, 0.85);
+    color: @foreground;
+    border-radius: 8px;
+    padding: 2px 10px;
+}
+
+/* WORKSPACES */
+#workspaces {
+    background-color: alpha(@color1, 0.85);
+    border-radius: 8px;
+    padding: 0 4px;
+}
+
+#workspaces button {
+    color: @foreground;
+    font-size: 0.6rem;
+}
+
+#workspaces button.active {
+    color: @color6;
+}
+
+/* CLOCK */
+#clock {
+    color: @color5;
+    font-weight: bold;
+}
+
+/* SYSTEM */
+#battery { color: @color2; }
+#memory  { color: @color3; }
+#disk    { color: @color4; }
+#cpu     { color: @color6; }
+#temperature { color: @color1; }

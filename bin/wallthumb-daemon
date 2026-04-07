@@ -1,0 +1,26 @@
+#!/bin/bash
+
+WATCHDIR="$HOME/Pictures/Wallpapers"
+THUMBDIR="$HOME/.cache/wallthumbs"
+
+mkdir -p "$THUMBDIR"
+
+inotifywait -m -e create -e moved_to --format "%f" "$WATCHDIR" | while read file; do
+    img="$WATCHDIR/$file"
+    thumb="$THUMBDIR/$file.png"
+
+    # wait a bit (file may still be copying)
+    sleep 0.2
+
+    # skip if already exists
+    [ -f "$thumb" ] && continue
+
+    case "$img" in
+        *.mp4|*.webm|*.gif)
+            ffmpeg -y -i "$img" -ss 00:00:01 -frames:v 1 -update 1 "$thumb" >/dev/null 2>&1
+            ;;
+        *.jpg|*.jpeg|*.png)
+            magick "$img" -resize 300x300^ -gravity center -extent 300x300 "$thumb" >/dev/null 2>&1
+            ;;
+    esac
+done
